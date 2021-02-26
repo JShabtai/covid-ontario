@@ -15,7 +15,10 @@ interface Row {
 let secondLast: Row;
 let last: Row;
 
-const stream = createReadStream('./data/raw/ltccovidsummary.csv').pipe(csv())
+const stream = createReadStream('./data/raw/ltccovidsummary.csv').pipe(csv({
+      mapHeaders: ({ header, index }) => header.trim()
+}));
+
 stream.on('data', (row: Row) => {
     secondLast = last;
     last = row;
@@ -39,11 +42,11 @@ stream.on('end', () => {
     secondLastRowTime.setMinutes(secondLastRowTime.getMinutes() + secondLastRowTime.getTimezoneOffset());
 
     if (getDateStr(yesterday) !== getDateStr(lastRowTime)) {
-        console.error('Warning: Last date appears wrong');
+        console.error(`Warning: Last date appears wrong: ${yesterday} !== ${lastRowTime}`);
         return;
     }
     if (getDateStr(twoDaysAgo) !== getDateStr(secondLastRowTime)) {
-        console.error('Warning: Second last date appears wrong');
+        console.error(`Warning: Second last date appears wrong: ${twoDaysAgo} !== ${secondLastRowTime}`);
         return;
     }
 
