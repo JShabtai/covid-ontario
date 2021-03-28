@@ -1,0 +1,31 @@
+
+<!--
+<div *ngFor='let a of phus' class='phu' style='left: {{a.x}}px; top: {{a.y}}px; height: {{a.size}}px; width: {{a.size}}px; background-color: {{a.color}}'>
+
+    <div  class='phuText' style='left: {{a.size}}px'>
+        {{a.name}}
+    </div>
+</div>
+-->
+<canvas id="myCanvas" width="1600" height="800" style="border:1px solid #000000;">
+</canvas>
+
+<div>
+<button class='controlButton' (click)='start()'>Start</button>
+<button class='controlButton' (click)='stop()'>Stop</button>
+
+<br />
+<button class='controlButton' (click)='prevFrame(1)'>&lt;-</button>
+<button class='controlButton' (click)='nextFrame(1)'>-&gt;</button>
+
+<br />
+<button class='controlButton' (click)='prevFrame()'>&lt;&lt;--</button>
+<button class='controlButton' (click)='nextFrame()'>--&gt;&gt;</button>
+</div>
+
+<br />
+
+Y-Axis: Weekly % growth <br />
+X-Axis: Weekly cases/100k <br />
+Size of bubble is the number of new cases (independent of population) <br />
+Colour of bubble corresponds to Ontario colour codes. Solid black is the province wide shutdown. <br />

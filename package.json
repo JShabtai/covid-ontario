@@ -8,8 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-
     "downloadData": "./scripts/downloadData.sh",
+    "processRawData": "echo TODO",
     "script": "ts-node -P tsconfig.scripts.json",
     "ltcStats": "npm rum script ./scripts/ltc_stats.ts"
   },

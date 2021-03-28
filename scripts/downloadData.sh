@@ -48,6 +48,8 @@ echo Vaccines
 # TODO Delivered and company breakdown?
 download "752ce2b7-c15a-4965-a3dc-397bf405e7cc" "vaccine_doses"
 
+curl -s -o "${data_dir}/vaccine_delivery.csv" "https://raw.githubusercontent.com/ccodwg/Covid19Canada/master/timeseries_prov/vaccine_completion_timeseries_prov.csv"
+
 echo Testing
 download "a2dfa674-a173-45b3-9964-1e3d2130b40f" "testing_metrics_by_phu"
 download "ab5f4a2b-7219-4dc7-9e4d-aa4036c5bf36" "percent_positive_by_agegrp"
