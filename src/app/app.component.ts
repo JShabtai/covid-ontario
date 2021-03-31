@@ -25,7 +25,7 @@ export class AppComponent {
       this.router = router;
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
 
-      this.routes = routes.filter((route) => { return route.path !== ''  });
+      this.routes = routes;
       // TODO Set based on uri
 
       this.router.events.subscribe((event: Event) => {

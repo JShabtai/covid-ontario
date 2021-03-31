@@ -1,17 +1,30 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule } from '@angular/router';
+import { Route, RouterModule, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { DailyCasesComponent } from './daily-cases/daily-cases.component';
-import { Sample2Component } from './sample2/sample2.component';
+import { VaccineRegistrationComponent } from './vaccine-registration/vaccine-registration.component';
 
 export interface CustomRoute extends Route {
     name: string;
 }
 
 export const routes: CustomRoute[] = [
-    { name: 'Animation', path: 'daily-cases', component: DailyCasesComponent },
+    {
+        name: 'PHUs',
+        component: DailyCasesComponent,
+        matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
+            let consumed = [];
+
+            if (segments.length === 0) {
+                consumed = segments;
+            }
+
+            return { consumed };
+        }
+    },
+    // { name: 'Vaccine Registration', path: 'vaccine-registration', component: VaccineRegistrationComponent },
 
     // Daily cases again to be the default
-    { name: '', path: '', component: DailyCasesComponent },
+    // { name: 'PHUs 2', path: 'test', component: DailyCasesComponent },
 ];
 
 @NgModule({

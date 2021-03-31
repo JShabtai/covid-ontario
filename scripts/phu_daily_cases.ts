@@ -77,16 +77,14 @@ stream.on('end', () => {
             id: phu.id,
             dailyCases: datesArray.map((date, index) => {
                 if (phu.cases[date]) {
-                    if (index > 0 && phu.cases[datesArray[index - 1]]) {
-                        return phu.cases[date].total - phu.cases[datesArray[index-1]].total;
-                    }
-                    else {
-                        return phu.cases[date].total;
+                    for (let i = 1; i <= index; i++) {
+                        if (index > 0 && phu.cases[datesArray[index - i]]) {
+                            return phu.cases[date].total - phu.cases[datesArray[index - i]].total;
+                        }
                     }
                 }
-                else {
-                    return 0;
-                }
+
+                return 0;
             }),
         };
         output.phus[phu.id] = phuData;

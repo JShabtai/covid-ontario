@@ -7,12 +7,14 @@
         </h1>
         <span class="spacer"></span>
 
+        <!--
         <button mat-button >
             <mat-icon class='toolbarButton'>info</mat-icon> About
         </button>
         <button mat-button >
             <mat-icon class='toolbarButton'>help</mat-icon> Help
         </button>
+        -->
     </mat-toolbar>
     <nav mat-tab-nav-bar animationDuration="0ms">
         <a *ngFor='let r of routes' mat-tab-link (click)='setTab(r)' [active]='currentTab === r'>

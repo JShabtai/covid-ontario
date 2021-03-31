@@ -16,78 +16,11 @@ interface ResponseFramework {
 }
 
 function getName(id: string) {
-    switch (id) {
-        case "2226":
-            return "Algoma";
-        case "2227":
-            return "Brant";
-        case "2230":
-            return "Durham";
-        case "2233":
-            return "Grey Bruce";
-        case "2234":
-            return "Haldimand";
-        case "2235":
-            return "Haliburton";
-        case "2236":
-            return "Halton";
-        case "2237":
-            return "Hamilton";
-        case "2238":
-            return "Hastings";
-        case "2240":
-            return "Chatham";
-        case "2241":
-            return "Kingston";
-        case "2242":
-            return "Lambton";
-        case "2243":
-            return "Leeds";
-        case "2244":
-            return "London";
-        case "2246":
-            return "Niagara";
-        case "2247":
-            return "North Bay";
-        case "2249":
-            return "Northwestern";
-        case "2251":
-            return "Ottawa";
-        case "2253":
-            return "Peel";
-        case "2255":
-            return "Peterborough";
-        case "2256":
-            return "Porcupine";
-        case "2257":
-            return "Renfrew";
-        case "2258":
-            return "Eastern";
-        case "2260":
-            return "Simcoe";
-        case "2261":
-            return "Sudbury";
-        case "2262":
-            return "Thunder Bay";
-        case "2263":
-            return "Timiskaming";
-        case "2265":
-            return "Waterloo";
-        case "2266":
-            return "Guelph";
-        case "2268":
-            return "Windsor";
-        case "2270":
-            return "York";
-        case "3895":
-            return "Toronto";
-        case "4913":
-            return "Southwestern";
-        case "5183":
-            return "Huron";
-        default:
-            return id;
+    if (phuMetadata[id]) {
+        return phuMetadata[id].shortName;
     }
+
+    return id;
 }
 
 const FULL_CIRCLE = 2 * Math.PI;
@@ -112,18 +45,23 @@ interface Animation{
     color: string;
 }
 
-function getX(cases: number): number {
-    return 10 + 5 * cases;
-}
-
-function getY(cases: number): number {
-    return 550 - 500 * cases;
-}
-
 class Canvas {
+
     private ctx: CanvasRenderingContext2D;
+
+    private element: HTMLCanvasElement;
+
     constructor(private canvas: HTMLCanvasElement) {
         this.ctx = canvas.getContext('2d');
+        this.element = canvas;
+    }
+
+    public height() {
+        return this.element.height;
+    }
+
+    public width() {
+        return this.element.width;
     }
 
     public clear() {
@@ -141,36 +79,35 @@ class Canvas {
         this.ctx.strokeStyle = 'rgb(150,150,150)';
         this.ctx.beginPath();
         this.ctx.moveTo(x, 0);
-        this.ctx.lineTo(x, 800);
+        this.ctx.lineTo(x, this.height());
         this.ctx.stroke();
-        this.drawText(value, x, 800 - 10)
+        this.drawText(value, x + 3, this.height() - 10)
     }
 
     public horizontalLine(y: number, value) {
-        const newY = Math.round(getY(y));
+        const newY = Math.round(y);
         this.ctx.strokeStyle = 'rgb(150,150,150)';
         this.ctx.beginPath();
         this.ctx.moveTo(0, newY);
-        this.ctx.lineTo(1600, newY);
+        this.ctx.lineTo(this.width(), newY);
         this.ctx.stroke();
-        this.drawText(value, 0, newY)
+        this.drawText(value, 0, newY - 2)
     }
 
-    public xAxis() {
+    public xAxis(height: number) {
         this.ctx.strokeStyle = '#000000';
-        // this.ctx.beginPath();
-        // this.ctx.moveTo(0,getY(0));
-        this.ctx.fillRect(0,getY(0),1600, 3);
-        // this.ctx.closePath();
-        // this.ctx.moveTo(0, getY(0));
-        // this.ctx.lineTo(1600, getY(0));
-        // this.ctx.stroke();
+        this.ctx.fillRect(0, Math.round(height),this.width(), 2);
     }
 
     public drawText(text: string, x: number, y: number) {
-        this.ctx.font = 'bold 20px sans';
-        this.ctx.fillStyle = 'rgba(40,30,30,1)';
+        this.ctx.font = 'bold 13px sans';
+        this.ctx.fillStyle = 'rgba(0,0,0,1)';
         this.ctx.fillText(text, x, y);
+    }
+
+    public resize(width: number, height: number) {
+        this.element.width = width;
+        this.element.height = height
     }
 }
 
@@ -180,6 +117,7 @@ interface AnimationPhu {
     size: number;
     name: string;
     color: string;
+    cases: number;
 }
 
 interface AnimationFrame {
@@ -229,7 +167,7 @@ export class DailyCasesComponent implements OnInit {
             case 'Control':
                 return 'rgba(200, 0, 0, 0.7)';
             case 'Lockdown':
-                return 'rgba(0, 0, 0, 0.7)';
+                return 'rgba(100, 100, 100, 0.9)';
             case 'Shutdown':
                 return 'rgba(0, 0, 0, 1)';
             case 'Pre-framework':
@@ -240,6 +178,28 @@ export class DailyCasesComponent implements OnInit {
                 console.log('missing', framework);
                 return 'rgba(0,0,0,1)';
         }
+    }
+
+    private getX(cases: number): number {
+        const width = this.canvas.width();
+        const max = 240;
+        const min = 0;
+        const offset = 50;
+        const zero = offset;
+        const value = zero + (width / (max - min)) * cases;
+        if (value > width - 20) {
+            return width - 20;
+        }
+
+        return value;
+    }
+
+    private getY(cases: number): number {
+        const height = this.canvas.height();
+        const max = 1.3;
+        const min = -0.6;
+        const zero = height - (height * (0 - min) / (max-min));
+        return zero - (height / (max - min)) * cases;
     }
 
     private canvas: Canvas = null;
@@ -260,22 +220,161 @@ export class DailyCasesComponent implements OnInit {
     }
 
     public start() {
+        if (this.count + 1 >= this.frames.length) {
+            this.count = this.startFrame;
+        }
+
         if (!this.interval) {
-            this.interval = setInterval(this.nextFrame.bind(this, 1), 50);
+            this.interval = setInterval(() => {
+                if (this.count + 1 >= this.frames.length) {
+                    this.stop();
+                }
+                else {
+                    this.nextFrame(1);
+                }
+            }, 250/this.speed);
+            console.log('int', this.interval);
         }
     }
 
     public stop() {
+            console.log('stop', this.interval, new Error('adsf'));
         if (this.interval) {
             clearInterval(this.interval);
             this.interval = null;
         }
     }
 
+    public speed: number = 5;
+
+    private drawCurrentFrame() {
+        this.canvas.clear();
+
+        for (let i = 0; i <= 10; i++) {
+            const spacing = 20;
+            let x = this.getX(spacing * i);
+            this.canvas.verticalLine(x, `${i * spacing}`);
+        }
+
+
+        for (let i = -4; i <= 14; i += 2) {
+            let y = this.getY(0.1 * i);
+            this.canvas.horizontalLine(y, `${10 * i}%`);
+        }
+
+        this.canvas.xAxis(this.getY(0));
+
+        const frame = this.frames[this.count];
+        if (!frame) {
+            return;
+        }
+        this.canvas.drawText(`${frame.date}`, this.canvas.width()/ 2 - 30, 20);
+        for (let phu of frame.phus) {
+            // if (phu.x > this.getX(30) && phu.cases > 30) {
+                this.canvas.fillCircle(phu.x, phu.y, phu.size, phu.color);
+                this.canvas.drawText(phu.name, phu.x + phu.size, phu.y)
+            // }
+        }
+    }
+
+    private computeFrames() {
+        if (!this.rawData) {
+            return;
+        }
+
+        const wipFrames: AnimationFrame[] = this.rawData.dates.slice(6).map((date) => {
+            return {
+                date,
+                phus: [],
+            };
+        });
+
+        for (let phuId of Object.keys(this.rawData.phus)) {
+            const phu = this.rawData.phus[phuId];
+            const phuName = phu.name;
+            const smooth = [];
+            for (let i = 6; i < phu.dailyCases.length; i++) {
+                let count = 0;
+                for (let j = i - 6; j <= i; j++) {
+                    count += phu.dailyCases[j];
+                }
+                count /= 7;
+                smooth.push(count);
+            }
+
+            for (let i = 0; i < smooth.length; i++) {
+                const cases = smooth[i]
+                // Calculate weekly cases/100k
+                const x = this.getX(7 * 100000 * cases / phuMetadata[phuId].population);
+                let y = 0;
+                if (i >= 7) {
+                    y =  ((smooth[i] / smooth[i-7]) - 1);
+                }
+                y = this.getY(y);
+                if (cases > 0) {
+                    const color = this.colourFromFramework(this.getResponseFramework(phu.id, wipFrames[i].date));
+                    wipFrames[i].phus.push({
+                        cases,
+                        x,
+                        y,
+                        size: 2 + 2*Math.sqrt(cases),
+                        name: getName(phu.id),
+                        color,
+                    });
+                }
+            }
+        }
+
+        function average(a, b, step) {
+            return a + (step * (b - a) / interpolationSteps)
+        }
+
+        // Interpolation
+        this.frames = [];
+        for (let i = 0; i < wipFrames.length - 1; i++) {
+            const frame = wipFrames[i];
+            const nextFrame = wipFrames[i + 1];
+
+
+            for (let step = 0; step < interpolationSteps; step++) {
+                const newFrame: AnimationFrame = {
+                    date: frame.date,
+                    phus: [],
+                };
+                for (let phu of frame.phus) {
+                    for (let nextFramePhu of nextFrame.phus) {
+                        if (phu.name === nextFramePhu.name) {
+                            const phuFrame = {
+                                cases: average(phu.cases, nextFramePhu.cases, step),
+                                x: average(phu.x, nextFramePhu.x, step),
+                                y: average(phu.y, nextFramePhu.y, step),
+                                size: average(phu.size, nextFramePhu.size, step),
+                                name: phu.name,
+                                color: phu.color,
+                            };
+
+                            newFrame.phus.push(phuFrame);
+
+                            break;
+                        }
+                    }
+                }
+
+                this.frames.push(newFrame);
+            }
+        }
+
+        // The last frame doesn't get added by interpolation, so add it manually
+        this.frames.push(wipFrames[wipFrames.length - 1]);
+
+        this.count = this.frames.length - 1;
+        this.drawCurrentFrame();
+    }
+
+    // TODO make this dynamic with a slider
+    private startFrame = 320 * interpolationSteps;
 
     public step(n: number) {
-        const startFrame = 315 * interpolationSteps;
-
         if (this.frames.length <= 0) {
             return;
         }
@@ -283,39 +382,24 @@ export class DailyCasesComponent implements OnInit {
         this.count += n;
 
         if (this.count >= this.frames.length) {
-            // TODO make this dynamic with a slider
-            this.count = startFrame;
+            this.count = this.startFrame;
         }
-        else if ( this.count < startFrame) {
-            this.count = this.frames.length - 1;
-        }
-        const frame = this.frames[this.count];
-
-        this.canvas.clear();
-
-        this.canvas.drawText(`${frame.date}`, 750, 20);
-
-        for (let i = 0; i <= 20; i++) {
-            const spacing = 20;
-            let x = getX(spacing * i);
-            this.canvas.verticalLine(x, `${i * spacing}`);
-        }
-
-
-        for (let i = -4; i <= 10; i += 2) {
-            let y = 0.1 * i;
-            this.canvas.horizontalLine(y, `${10 * i}%`);
-        }
-
-        this.canvas.xAxis();
-
-        for (let phu of frame.phus) {
-            if (phu.x > getX(30)) {
-                this.canvas.fillCircle(phu.x, phu.y, phu.size, phu.color);
-                this.canvas.drawText(phu.name, phu.x + phu.size, phu.y)
+        else if (this.count < this.startFrame) {
+            if (n < 0) {
+                this.count = this.frames.length - 1;
+            }
+            else {
+                this.count = this.startFrame;
             }
         }
 
+        this.drawCurrentFrame();
+    }
+
+    private onResize () {
+        this.canvas.resize(window.innerWidth - 50, window.innerHeight - 280);
+        this.computeFrames();
+        this.drawCurrentFrame();
     }
 
     ngOnInit(): void {
@@ -324,93 +408,18 @@ export class DailyCasesComponent implements OnInit {
             this.getData();
         });
         this.canvas = new Canvas(document.getElementById('myCanvas') as HTMLCanvasElement);
-
-
-        this.start();
+        window.onresize = this.onResize.bind(this);
+        this.onResize();
     }
+
+    private rawData: PhuCases = null;
 
     public getData() {
         this.dataFetcher.fetchData(DataNames.PhuDailyCases)
         .subscribe((data: PhuCases) => {
-            const wipFrames: AnimationFrame[] = data.dates.slice(6).map((date) => {
-                return {
-                    date,
-                    phus: [],
-                };
-            });
-
-            for (let phuId of Object.keys(data.phus)) {
-                const phu = data.phus[phuId];
-                const phuName = phu.name;
-                const smooth = [];
-                for (let i = 6; i < phu.dailyCases.length; i++) {
-                    let count = 0;
-                    for (let j = i - 6; j <= i; j++) {
-                        count += phu.dailyCases[j];
-                    }
-                    count /= 7;
-                    smooth.push(count);
-                }
-
-                for (let i = 0; i < smooth.length; i++) {
-                    const cases = smooth[i]
-                    // Calculate weekly cases/100k
-                    const x = getX(7 * 100000 * cases / phuMetadata[phuId].population);
-                    let y = 0;
-                    if (i >= 7) {
-                        y =  ((smooth[i] / smooth[i-7]) - 1);
-                    }
-                    y = getY(y);
-                    if (cases > 0) {
-                        const color = this.colourFromFramework(this.getResponseFramework(phu.id, wipFrames[i].date));
-                        wipFrames[i].phus.push({
-                            x,
-                            y,
-                            size: 2 + 2*Math.sqrt(cases),
-                            name: getName(phu.id),
-                            color,
-                        });
-                    }
-                }
-            }
-
-            function average(a, b, step) {
-                return a + (step * (b - a) / interpolationSteps)
-            }
-
-            // Interpolation
-            this.frames = [];
-            for (let i = 0; i < wipFrames.length - 1; i++) {
-                const frame = wipFrames[i];
-                const nextFrame = wipFrames[i + 1];
-
-
-                for (let step = 0; step < interpolationSteps; step++) {
-                    const newFrame: AnimationFrame = {
-                        date: frame.date,
-                        phus: [],
-                    };
-                    for (let phu of frame.phus) {
-                        for (let nextFramePhu of nextFrame.phus) {
-                            if (phu.name === nextFramePhu.name) {
-                                const phuFrame = {
-                                    x: average(phu.x, nextFramePhu.x, step),
-                                    y: average(phu.y, nextFramePhu.y, step),
-                                    size: average(phu.size, nextFramePhu.size, step),
-                                    name: phu.name,
-                                    color: phu.color,
-                                };
-
-                                newFrame.phus.push(phuFrame);
-
-                                break;
-                            }
-                        }
-                    }
-
-                    this.frames.push(newFrame);
-                }
-            }
+            this.rawData = data;
+            this.onResize();
+            this.computeFrames();
         });
     }
 }

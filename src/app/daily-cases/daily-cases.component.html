@@ -7,20 +7,34 @@
     </div>
 </div>
 -->
-<canvas id="myCanvas" width="1600" height="800" style="border:1px solid #000000;">
+<canvas id="myCanvas" style="border:1px solid #000000;">
 </canvas>
 
 <div>
-<button class='controlButton' (click)='start()'>Start</button>
-<button class='controlButton' (click)='stop()'>Stop</button>
+    <button mat-icon-button (click)='start()' color='secondary'>
+        <mat-icon>play_circle_filled</mat-icon>
+    </button>
+    <button mat-icon-button (click)='stop()' color='secondary'>
+        <mat-icon>stop</mat-icon>
+    </button>
 
-<br />
-<button class='controlButton' (click)='prevFrame(1)'>&lt;-</button>
-<button class='controlButton' (click)='nextFrame(1)'>-&gt;</button>
+    <button mat-icon-button (click)='prevFrame(1)' color='secondary'>
+        <mat-icon>skip_previous</mat-icon>
+    </button>
+    <button mat-icon-button (click)='nextFrame(1)' color='secondary'>
+        <mat-icon>skip_next</mat-icon>
+    </button>
 
-<br />
-<button class='controlButton' (click)='prevFrame()'>&lt;&lt;--</button>
-<button class='controlButton' (click)='nextFrame()'>--&gt;&gt;</button>
+    <button mat-icon-button (click)='prevFrame()' color='secondary'>
+        <mat-icon>fast_rewind</mat-icon>
+    </button>
+    <button mat-icon-button (click)='nextFrame()' color='secondary'>
+        <mat-icon>fast_forward</mat-icon>
+    </button>
+</div>
+
+<div>
+    <mat-slider color='primary' value='5' min='1' max='10' [(ngModel)]='speed' (change)='stop();start()'> </mat-slider>
 </div>
 
 <br />
