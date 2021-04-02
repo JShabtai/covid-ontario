@@ -199,7 +199,16 @@ export class DailyCasesComponent implements OnInit {
         const max = 1.3;
         const min = -0.6;
         const zero = height - (height * (0 - min) / (max-min));
-        return zero - (height / (max - min)) * cases;
+        let ret = zero - (height / (max - min)) * cases;
+
+        if (ret > height) {
+            ret = height;
+        }
+        else if (ret < 10) {
+            ret = 10;
+        }
+
+        return ret;
     }
 
     private canvas: Canvas = null;
@@ -257,7 +266,7 @@ export class DailyCasesComponent implements OnInit {
         }
 
 
-        for (let i = -4; i <= 14; i += 2) {
+        for (let i = -4; i <= 12; i += 2) {
             let y = this.getY(0.1 * i);
             this.canvas.horizontalLine(y, `${10 * i}%`);
         }

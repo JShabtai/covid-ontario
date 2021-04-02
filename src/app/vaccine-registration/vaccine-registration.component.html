@@ -1,1 +1,122 @@
-<p>vaccine-registration works!</p>
+<div class='text'>
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Province-wide eligibility
+                </mat-panel-title>
+                <mat-panel-description>
+                    You are eligible if you meet any of these criteria, in any part of the province.
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            The following groups are eligible <strong>province wide</strong>:
+
+            <ul>
+                <li>First nations, Metis, or Inuit adult</li>
+                <li>First Nations Elder care home residents and staff</li>
+                <li>Chronic home healthcare recipient</li>
+                <li>Those living or working in long term care, assisted living or retirement homes</li>
+                <li>Essential caregiver for care home residents</li>
+                <li>Personal support workers</li>
+                <li>Front-line health care workers</li>
+            </ul>
+
+            <p>
+            Additionally, the Oxford-Astrazeneca vaccine is (or soon will be) available through pharmacies for <strong>ages 55+</strong>. Check the provinces <a targer='_blank' href='https://covid-19.ontario.ca/vaccine-locations'>vaccine location finder</a> to see if it's available near you. There are currently 698 participating pharmacies.
+            </p>
+
+            <p>
+            Note: If you will meet or have met an age requirement any time in 2021 then you are considered to be eligible. For example if the requirement is 65+ and you turn 65 in December, then you are still eligible even though you are currently 64.
+            </p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Registration notes/tips
+                </mat-panel-title>
+                <mat-panel-description>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+        <div>
+            <p>
+            For the provincial booking portal: if you have the <strong>old red and white health card</strong> you have to book over the phone. The number will be available through the provided link.
+            </p>
+
+            <p>
+            You <strong>can</strong> book an appointment if your health card is expired.
+            </p>
+        </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+
+<table mat-table [dataSource]="phus" class="mat-elevation-z8">
+    <ng-container matColumnDef='name'>
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef='let phu'>{{ phu.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef='url'>
+        <th mat-header-cell *matHeaderCellDef>Registration link</th>
+        <td mat-cell *matCellDef='let phu'>
+            <a target='_blank' href='{{phu.url}}'>{{ getUrlDisplayText(phu) }}</a>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef='minAge'>
+        <th mat-header-cell *matHeaderCellDef>Minimum Age</th>
+        <td mat-cell *matCellDef='let phu'>{{ phu.minAge }}+</td>
+    </ng-container>
+
+    <ng-container matColumnDef='preRegistration'>
+        <th mat-header-cell *matHeaderCellDef>Pre-registration</th>
+        <td mat-cell *matCellDef='let phu'>
+            <div *ngIf='phu.preRegistration.length > 0; else noCriteria'>
+                {{ phu.preRegistration.join(', ') }}
+            </div>
+            <ng-template #noCriteria>
+            -
+            </ng-template>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef='lastUpdated'>
+        <th mat-header-cell *matHeaderCellDef>Last updated</th>
+        <td mat-cell *matCellDef='let phu'>
+            {{ phu.lastUpdated }}
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
+<mat-card>
+    <p>
+    I'll do my best to keep this up to date, but there are {{phus.length}} PHUs in Ontario so I expect this to get out of date fast.
+    If you notice anything is wrong or outdated, please let me know by email: <a href='mailto:{{email}}?subject=Vaccine Eligibility'>{{email}}</a>
+    or through Twitter <a target='_blank' href='https://twitter.com/{{twitter}}'>@{{twitter}}</a> (DM or just tag me in a tweet)
+    </p>
+
+    <p>
+    Please include the following information
+    </p>
+
+    <ul>
+        <li>
+            Which PHU is out of date
+        </li>
+
+        <li>
+            What information is out of date
+        </li>
+
+        <li>
+            A link to verify the information
+        </li>
+    </ul>
+</mat-card>

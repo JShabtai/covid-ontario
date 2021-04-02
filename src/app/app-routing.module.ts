@@ -11,6 +11,7 @@ export const routes: CustomRoute[] = [
     {
         name: 'PHUs',
         component: DailyCasesComponent,
+        canDeactivate: [],
         matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
             let consumed = [];
 
@@ -21,7 +22,7 @@ export const routes: CustomRoute[] = [
             return { consumed };
         }
     },
-    // { name: 'Vaccine Registration', path: 'vaccine-registration', component: VaccineRegistrationComponent },
+    { name: 'Vaccine Registration', path: 'vaccine-registration', component: VaccineRegistrationComponent },
 
     // Daily cases again to be the default
     // { name: 'PHUs 2', path: 'test', component: DailyCasesComponent },

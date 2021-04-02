@@ -10,9 +10,12 @@ import { Sample1Component } from './sample1/sample1.component';
 import { Sample2Component } from './sample2/sample2.component';
 
 
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { DailyCasesComponent } from './daily-cases/daily-cases.component';
@@ -35,9 +38,12 @@ import { VaccineRegistrationComponent } from './vaccine-registration/vaccine-reg
     HttpClientModule,
 
     MatButtonModule,
+    MatCardModule,
+    MatExpansionModule,
     MatIconModule,
     MatSliderModule,
     MatTabsModule,
+    MatTableModule,
     MatToolbarModule,
   ],
   providers: [],

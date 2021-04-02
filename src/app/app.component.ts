@@ -26,18 +26,16 @@ export class AppComponent {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
 
       this.routes = routes;
-      // TODO Set based on uri
 
       this.router.events.subscribe((event: Event) => {
           for (let route of this.routes) {
-              if ( this.router.isActive(route.path, false)) {
+              if (route.path && this.router.isActive(route.path, false)) {
                   this.currentTab = route;
-                  break;
+                  return;
               }
           }
 
-          // If we didn't find it, then we're on the default path, which was also
-          // manually placed at the beginning of the array
+          // If we didn't find it, then we're on the default path
           this.currentTab = this.routes[0];
       });
   }
