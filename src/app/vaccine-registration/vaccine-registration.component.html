@@ -1,6 +1,6 @@
 <div class='text'>
     <mat-accordion>
-        <mat-expansion-panel>
+        <mat-expansion-panel expanded>
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     Province-wide eligibility
@@ -72,14 +72,32 @@
     </ng-container>
 
     <ng-container matColumnDef='preRegistration'>
-        <th mat-header-cell *matHeaderCellDef>Pre-registration</th>
+        <th mat-header-cell *matHeaderCellDef>Other notes</th>
         <td mat-cell *matCellDef='let phu'>
-            <div *ngIf='phu.preRegistration.length > 0; else noCriteria'>
+            <div *ngIf='phu.preRegistration.length > 0'>
                 {{ phu.preRegistration.join(', ') }}
             </div>
-            <ng-template #noCriteria>
-            -
-            </ng-template>
+
+            <div *ngIf='phu.additionalEligibility && phu.additionalEligibility.length > 0' class='additionalEligibility'>
+                <mat-accordion class='additionalEligibility'>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                More eligible groups
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                You are eligible if you meet any of these criteria. May be subject to specific neighborhoods
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        See links for more details.
+                        <ul class='additionalEligibility'>
+                            <li *ngFor='let e of phu.additionalEligibility' class='additionalEligibility'>
+                                <a target='_blank' href='{{e.url}}'>{{ e.name }}</a>: {{  e.description  }}
+                            </li>
+                        </ul>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
         </td>
     </ng-container>
 

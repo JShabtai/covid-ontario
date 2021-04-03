@@ -1,8 +1,15 @@
+export interface AdditionalEligibility {
+    name: string;
+    description: string;
+    url: string;
+}
+
 export interface Phu {
     name: string;
     url: string;
     minAge: number;
     preRegistration: string[];
+    additionalEligibility?: AdditionalEligibility[];
     notes?: string;
     lastUpdated: string;
 }
@@ -64,7 +71,7 @@ export const registrationData: PhuMap = {
         lastUpdated: 'April 2, 2021',
         name: "Halton Region",
         url: 'https://halton.ca/COVIDvaccines',
-        minAge: 75,
+        minAge: 65,
         preRegistration: [
         ],
     },
@@ -256,6 +263,38 @@ export const registrationData: PhuMap = {
         minAge: 60,
         preRegistration: [
         ],
+        additionalEligibility: [
+            {
+                name: 'Scarborough',
+                description: '"Highest risk", "high risk" and "at risk". Must live in Scarborough, work in healthcare in Scarborough, or have your primary doctor in Scarborough',
+                url: 'https://www.scarboroughcovidvaccineclinic.ca/',
+            },
+            {
+                name: 'Toronto East Health Network',
+                description: '50+ for people whose postal codes start with M4H, M1L, M3C, M4A, M1K, M1M, M1J',
+                url: 'https://tehn.ca/covid19/covid-19-vaccine',
+            },
+            {
+                name: 'Sunnybrook',
+                description: 'People at "high risk" and "highest" risk. Must live in catchment area.',
+                url: 'https://sunnybrook.ca/content/?page=novel-coronavirus-covid-19-vaccine-information',
+            },
+            {
+                name: 'Humber River',
+                description: 'Ages 50+ who ive in North Western Toronto catchment area (South of Steeles, North of Eglinton, East of Humber River/Islington and West of Bathurst)',
+                url: 'https://www.hrh.ca/covax-clinic-booking/',
+            },
+            {
+                name: 'North York General',
+                description: 'People at "high risk" and "highest" risk. Must live in catchment area.',
+                url: 'https://nygh.on.ca/covid19vaccination',
+            },
+            {
+                name: 'Unity Health',
+                description: 'People at "high risk" and "highest" risk. These postal codes only. St. Mikes: M4X, M5A, M5B. St. Joes: M6K, M6N, M8V, M9A, M9B, M9C, M9R, M9V, M9W',
+                url: 'https://unityhealth.to/how-to-book-covid-appointment/',
+            },
+        ],
     },
     "4913": {
         // Note: This is actually done through the London PHU
@@ -279,7 +318,7 @@ export const registrationData: PhuMap = {
         lastUpdated: 'April 2, 2021',
         name: "Durham Region",
         url: 'https://www.durhamvaccinebooking.ca/',
-        minAge: 70,
+        minAge: 65,
         preRegistration: [
         ],
     },
