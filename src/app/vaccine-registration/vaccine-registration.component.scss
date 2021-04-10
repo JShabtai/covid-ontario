@@ -37,6 +37,19 @@ ul.additionalEligibility {
     padding-left: 0;
 }
 
+li.additionalEligibility {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+li.additionalEligibility:hover {
+    background-color: #eeeeee;
+}
+
 div.additionalEligibility {
     margin: 10px 22px 10px 0px;
+}
+
+.noLinkName {
+    text-decoration: underline;
 }

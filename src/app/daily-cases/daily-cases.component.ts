@@ -142,8 +142,11 @@ export class DailyCasesComponent implements OnInit {
 
         if (this.responseFramework[id]) {
             for (let stage of this.responseFramework[id]) {
-                // TODO Check dates
+                // The Easter shutdown was not the same as the Boxing Day one
                 if (date >= stage.start && date <= stage.end) {
+                    if (stage.start === '2021-04-03') {
+                        return 'Shutdown-Lite';
+                    }
                     return stage.status;
                 }
             }
@@ -170,6 +173,8 @@ export class DailyCasesComponent implements OnInit {
                 return 'rgba(100, 100, 100, 0.9)';
             case 'Shutdown':
                 return 'rgba(0, 0, 0, 1)';
+            case 'Shutdown-Lite':
+                return 'rgba(80, 0, 80, 1)';
             case 'Pre-framework':
                 return 'rgba(0, 255, 0, 0.5)';
             case 'Other':
@@ -182,7 +187,7 @@ export class DailyCasesComponent implements OnInit {
 
     private getX(cases: number): number {
         const width = this.canvas.width();
-        const max = 240;
+        const max = 320;
         const min = 0;
         const offset = 50;
         const zero = offset;
@@ -259,7 +264,7 @@ export class DailyCasesComponent implements OnInit {
     private drawCurrentFrame() {
         this.canvas.clear();
 
-        for (let i = 0; i <= 10; i++) {
+        for (let i = 0; i <= 15; i++) {
             const spacing = 20;
             let x = this.getX(spacing * i);
             this.canvas.verticalLine(x, `${i * spacing}`);
@@ -326,7 +331,7 @@ export class DailyCasesComponent implements OnInit {
                         cases,
                         x,
                         y,
-                        size: 2 + 2*Math.sqrt(cases),
+                        size: 2 + 1*Math.sqrt(cases),
                         name: getName(phu.id),
                         color,
                     });
